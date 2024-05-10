@@ -2,10 +2,9 @@
 
 from pathlib import Path
 from typing import Callable
-
 from pandas import DataFrame, read_csv
 
-from analysis.scripts.create_patient import (
+from scripts.create_patient import (
     ACTIVE_STR,
     ALCO_STR,
     CARDIO_STR,
@@ -16,9 +15,9 @@ from analysis.scripts.create_patient import (
 from scripts.patient import Patient
 
 
-_CARDIO_DATASET_PATH = Path("../data/object_compatible/cardio_train.csv")
-CARDIO_DATASET = read_csv(_CARDIO_DATASET_PATH, sep=";")
-
+def load_dataset(path: str | Path) -> DataFrame:
+    dataset = read_csv(path, sep=";")
+    return dataset
 
 def _booleanize_dataset(dataset: DataFrame) -> DataFrame:
     """Method to convert dataset to boolean values"""

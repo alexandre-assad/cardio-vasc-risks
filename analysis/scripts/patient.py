@@ -4,7 +4,7 @@ from enum import Enum, auto
 from typing import Dict
 from pydantic import BaseModel
 
-from analysis.scripts.bmi import (
+from scripts.bmi import (
     AGE_GROUP_REFERENCE,
     AGE_GROUP_VALUES,
     BMI_VALUES,
@@ -107,7 +107,7 @@ class Patient(BaseModel):
         """Method to get ap_hi status"""
         ceilings = AP_HIGH_VALUES.values()
         accepted_range = range(min(ceilings), max(ceilings) + 1)
-        if self.ap_hi not in accepted_range:
+        if int(self.ap_hi) not in accepted_range:
             return ApHighLevel.INVALID
         for level, value in AP_HIGH_VALUES.items():
             if self.ap_hi <= value:
@@ -119,7 +119,7 @@ class Patient(BaseModel):
         """Method to get ap_lo status"""
         floors = AP_LOW_VALUES.values()
         accepted_range = range(min(floors), max(floors) + 1)
-        if self.ap_lo not in accepted_range:
+        if int(self.ap_lo) not in accepted_range:
             return ApLowLevel.INVALID
         for level, value in AP_LOW_VALUES.items():
             if self.ap_lo <= value:

@@ -1,12 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Tuple
-from numpy import array, dot, floating, log, mean, ndarray, exp, sum, zeros
-from sklearn.datasets import make_moons
+from numpy import array, dot, log, mean, ndarray, exp, sum, zeros
+
 
 
 @dataclass
 class CustomLogisticRegression:
-    _threshold: float = 0.5
+    threshold: float = 0.5
+    # function_optimize
     _weight: ndarray = field(default_factory=lambda: zeros((1, 1)))
     _bias: float = 0.0
     _losses: list = field(default_factory=list)
@@ -173,9 +174,7 @@ class CustomLogisticRegression:
         predictions = self._hypotesis(self._weight, self._bias, dataframe)
 
         predictions_classified = [
-            1 if prediction > self._threshold else 0 for prediction in predictions
+            1 if prediction > self.threshold else 0 for prediction in predictions
         ]
 
         return array(predictions_classified)
-
-

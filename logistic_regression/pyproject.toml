@@ -2,16 +2,12 @@
 name = "logistic-regression"
 version = "0.1.0"
 description = ""
-authors = ["alexandre-assad <alexandre.assad@laplateforme.io>"]
+authors = ["alexandre-assad & hugo-andriamaromanana"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pandas = "^2.2.2"
 numpy = "^1.26.4"
-seaborn = "^0.13.2"
-matplotlib = "^3.8.4"
-scikit-learn = "^1.0.2"
 
 
 [build-system]

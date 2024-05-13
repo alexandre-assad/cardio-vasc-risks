@@ -268,6 +268,22 @@ files = [
 ]
 
 [[package]]
+name = "logistic-regression"
+version = "0.1.0"
+description = ""
+optional = false
+python-versions = "^3.11"
+files = []
+develop = false
+
+[package.dependencies]
+numpy = "^1.26.4"
+
+[package.source]
+type = "directory"
+url = "logistic_regression"
+
+[[package]]
 name = "matplotlib"
 version = "3.8.4"
 description = "Python plotting package"
@@ -709,4 +725,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "fc6656a666ba65b75a044eae1e49758a587238296b6bc24ca71794a7cbafb0b3"
+content-hash = "bd9e961d185f4121febec6be389742b1a9f867a8fe438f2245c9d5585fc531f4"

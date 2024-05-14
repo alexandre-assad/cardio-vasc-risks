@@ -3,6 +3,7 @@
 from enum import Enum, auto
 from typing import Dict
 from pydantic import BaseModel
+from icecream import ic
 
 from scripts.bmi import (
     AGE_GROUP_REFERENCE,
@@ -87,20 +88,21 @@ class Patient(BaseModel):
     @property
     def bmi(self) -> float:
         """Returns the bmi"""
-        return self.weight / (self.height / 100) ** 2
+        bmi = self.weight / ((self.height / 100) ** 2)
+        return round(bmi, 2)
 
     @property
     def bmi_status(self) -> BmiLevel:
         """Method to get the BMI Status"""
         for level, group_range in BMI_VALUES[self.broader_age_group].items():
-            if self.bmi in group_range:
+            if int(self.bmi) in group_range:
                 return level
         raise ValueError(f"Absurd BMI Value ({self.bmi})")
 
     @property
     def bmi_is_valid(self) -> bool:
         """Checks if bmi is in accepted range"""
-        return self.bmi in _ALLOWED_BMI_PER_GROUP[self.broader_age_group]
+        return int(self.bmi) in _ALLOWED_BMI_PER_GROUP[self.broader_age_group]
 
     @property
     def ap_hi_status(self) -> ApHighLevel:
@@ -158,13 +160,11 @@ class Patient(BaseModel):
     @property
     def in_hypertension(self) -> bool:
         """Returns if patient is in hypertension"""
-        return all(
-            [
-                (self.ap_hi_status == ApHighLevel.HYPERTENSION_STAGE_1)
-                or (self.ap_hi_status == ApHighLevel.HYPERTENSION_STAGE_2),
-                (self.ap_lo_status == ApHighLevel.HYPERTENSION_STAGE_1)
-                or (self.ap_lo_status == ApHighLevel.HYPERTENSION_STAGE_2),
-            ]
+        return (
+            self.ap_hi_status == ApHighLevel.HYPERTENSION_STAGE_1
+            or self.ap_lo_status == ApLowLevel.HYPERTENSION_STAGE_1
+            or self.ap_hi_status == ApHighLevel.HYPERTENSION_STAGE_2
+            or self.ap_lo_status == ApLowLevel.HYPERTENSION_STAGE_2
         )
 
     @property
@@ -185,4 +185,5 @@ class Patient(BaseModel):
     @property
     def is_healthy(self) -> bool:
         """No pathologies"""
-        return not all([self.in_hypertension, self.is_overweight, self.is_underweight])
+        return not (self.in_hypertension or self.is_overweight or self.is_underweight)
+    

@@ -1,6 +1,7 @@
 """Patient definition and validation"""
 
 from enum import Enum, auto
+from functools import cached_property
 from typing import Dict
 from pydantic import BaseModel
 from icecream import ic
@@ -59,17 +60,17 @@ class Patient(BaseModel):
     active: bool
     cardio: bool
 
-    @property
+    @cached_property
     def years(self) -> int:
         """Days to years to repr"""
         return int(self.age * _DAY_TO_YEAR_RATIO)
 
-    @property
+    @cached_property
     def gender(self) -> Gender:
         """Quick Repr of gender"""
         return Gender[MALE_STR] if not self.sex else Gender[FEMALE_STR]
 
-    @property
+    @cached_property
     def age_group(self) -> AgeGroup:
         """Returns the age group"""
         for age_group, valid_range in AGE_GROUP_VALUES.items():
@@ -77,7 +78,7 @@ class Patient(BaseModel):
                 return age_group
         raise ValueError(f"Age exceeding limit set ({_ALLOWED_AGE})")
 
-    @property
+    @cached_property
     def broader_age_group(self) -> AgeGroup:
         """Simplifies the age group"""
         for broader_age_group, sub_groups in AGE_GROUP_REFERENCE.items():
@@ -85,13 +86,13 @@ class Patient(BaseModel):
                 return broader_age_group
         raise ValueError(f"Couldn't find broader age group for {self.age_group}")
 
-    @property
+    @cached_property
     def bmi(self) -> float:
         """Returns the bmi"""
         bmi = self.weight / ((self.height / 100) ** 2)
         return round(bmi, 2)
 
-    @property
+    @cached_property
     def bmi_status(self) -> BmiLevel:
         """Method to get the BMI Status"""
         for level, group_range in BMI_VALUES[self.broader_age_group].items():
@@ -99,12 +100,12 @@ class Patient(BaseModel):
                 return level
         raise ValueError(f"Absurd BMI Value ({self.bmi})")
 
-    @property
+    @cached_property
     def bmi_is_valid(self) -> bool:
         """Checks if bmi is in accepted range"""
         return int(self.bmi) in _ALLOWED_BMI_PER_GROUP[self.broader_age_group]
 
-    @property
+    @cached_property
     def ap_hi_status(self) -> ApHighLevel:
         """Method to get ap_hi status"""
         ceilings = AP_HIGH_VALUES.values()
@@ -116,7 +117,7 @@ class Patient(BaseModel):
                 return level
         raise ValueError("Invalid ap_hi value")
 
-    @property
+    @cached_property
     def ap_lo_status(self) -> ApLowLevel:
         """Method to get ap_lo status"""
         floors = AP_LOW_VALUES.values()
@@ -128,22 +129,22 @@ class Patient(BaseModel):
                 return level
         raise ValueError("Invalid ap_lo value")
 
-    @property
+    @cached_property
     def height_is_valid(self) -> bool:
         """Method to get height status"""
         return self.height in _ALLOWED_HEIGHT
 
-    @property
+    @cached_property
     def weight_is_valid(self) -> bool:
         """Method to get weight status"""
         return self.weight in _ALLOWED_WEIGHT
 
-    @property
+    @cached_property
     def age_is_valid(self) -> bool:
         """Method to get age status"""
         return self.years in _ALLOWED_AGE
 
-    @property
+    @cached_property
     def is_valid(self) -> bool:
         """Method to check if patient is valid"""
         return all(
@@ -157,7 +158,7 @@ class Patient(BaseModel):
             ]
         )
 
-    @property
+    @cached_property
     def in_hypertension(self) -> bool:
         """Returns if patient is in hypertension"""
         return (
@@ -167,7 +168,7 @@ class Patient(BaseModel):
             or self.ap_lo_status == ApLowLevel.HYPERTENSION_STAGE_2
         )
 
-    @property
+    @cached_property
     def is_overweight(self) -> bool:
         """Returns the patient is overweight"""
         return (
@@ -177,12 +178,12 @@ class Patient(BaseModel):
             or (self.bmi_status == BmiLevel.OVERWEIGHT)
         )
 
-    @property
+    @cached_property
     def is_underweight(self) -> bool:
         """Returns if the patient is underweight"""
         return self.bmi_status == BmiLevel.UNDERWEIGHT
 
-    @property
+    @cached_property
     def is_healthy(self) -> bool:
         """No pathologies"""
         return not (self.in_hypertension or self.is_overweight or self.is_underweight)

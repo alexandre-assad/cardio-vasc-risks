@@ -44,10 +44,23 @@ def create_all_patients(dataset: DataFrame) -> List[Patient]:
         patients.append(create_patient(row))
     return patients
 
-def plot_counts(counts: Dict[Enum,int]) -> None:
-    sns.barplot(x=[status.name for status in counts.keys()], y=counts.values())
+
+def plot_counts(res: tuple[Dict[Enum,int],Dict[Enum,int]]) -> None:
+    occ, sick_count = res
+    total_counts = []
+    sick_counts = []
+    
+    for age_group in occ.keys():
+        total_counts.append(occ[age_group])
+        sick_counts.append(sick_count.get(age_group, 0))
+
+    sns.barplot(x=[age_group.name for age_group in occ.keys()], y=total_counts, color='blue', label='Total')
+
+    sns.barplot(x=[age_group.name for age_group in occ.keys()], y=sick_counts, color='red', label='Sick')
+
     plt.ylabel("Count")
     plt.xticks(rotation=45)
     plt.xlabel("")
     plt.title("Distribution of Patients by Status")
+    plt.legend()
     plt.show()

@@ -4,6 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["alexandre-assad <alexandre.assad@laplateforme.io>"]
 readme = "README.md"
+packages = [
+    { include = "logistic_regression"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -12,7 +15,6 @@ numpy = "^1.26.4"
 seaborn = "^0.13.2"
 matplotlib = "^3.8.4"
 scikit-learn = "^1.0.2"
-logistic-regression = { path = "logistic_regression"}
 
 [build-system]
 requires = ["poetry-core"]

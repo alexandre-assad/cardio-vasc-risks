@@ -1,17 +1,16 @@
 from dataclasses import dataclass, field
-from typing import Tuple
+from typing import Callable, Tuple, TypeAlias
 from numpy import array, dot, log, mean, ndarray, exp, sum, zeros
 
-
-
-@dataclass
 class CustomLogisticRegression:
-    threshold: float = 0.5
-    # function_optimize
-    _weight: ndarray = field(default_factory=lambda: zeros((1, 1)))
-    _bias: float = 0.0
-    _losses: list = field(default_factory=list)
 
+    def __init__(self, threshold = 0.5) -> None:
+        self.threshold: float = threshold
+        self.__weight: ndarray = field(default_factory=lambda: zeros((1, 1)))
+        self.__bias: float = 0.0
+        self.__losses: list = []
+
+    
     def _sigmoid_transform(self, values: ndarray) -> ndarray:
         """
         To return a hypotesis (self._hypothesis) between 0 & 1, logistic regressor need to apply a sigmoid_transformation to squished value in this range. It will apply
@@ -128,9 +127,9 @@ class CustomLogisticRegression:
 
         number_observations, number_features = dataframe.shape
 
-        self._weight = zeros((number_features, 1))
-        self._bias = 0.0
-        self._losses = []
+        self.__weight = zeros((number_features, 1))
+        self.__bias = 0.0
+        self.__losses = []
 
         target_values = target_values.reshape(number_observations, 1)
         dataframe = self._normalize_dataframe(dataframe)
@@ -144,7 +143,7 @@ class CustomLogisticRegression:
                 target_values_by_batch = target_values[start_of_batch:end_of_batch]
 
                 hypothesis = self._hypotesis(
-                    self._weight, self._bias, dataframe_by_batch
+                    self.__weight, self.__bias, dataframe_by_batch
                 )
                 partial_derivative_weight, partial_derivative_bias = (
                     self._gradient_calc(
@@ -152,12 +151,12 @@ class CustomLogisticRegression:
                     )
                 )
 
-                self._weight -= learning_rate * partial_derivative_weight
-                self._bias -= learning_rate * partial_derivative_bias
+                self.__weight -= learning_rate * partial_derivative_weight
+                self.__bias -= learning_rate * partial_derivative_bias
 
-            self._losses.append(
+            self.__losses.append(
                 self._lost_function(
-                    target_values, self._hypotesis(self._weight, self._bias, dataframe)
+                    target_values, self._hypotesis(self.__weight, self.__bias, dataframe)
                 )
             )
 
@@ -167,14 +166,27 @@ class CustomLogisticRegression:
         
         Input : 
             dataframe, ndarray : the matrix of the values from the dataframe
-        Output:
+        Output :
             ndarray : the matrix of the predicted labels
         """
         dataframe = self._normalize_dataframe(dataframe)
-        predictions = self._hypotesis(self._weight, self._bias, dataframe)
+        predictions = self._hypotesis(self.__weight, self.__bias, dataframe)
 
         predictions_classified = [
             1 if prediction > self.threshold else 0 for prediction in predictions
         ]
 
         return array(predictions_classified)
+    
+
+    def predict_proba(self, dataframe: ndarray) -> ndarray:
+        """
+        Probability from 0 to 1 to each observations of a dataframe to be classified as the label.
+
+        Input :
+            dataframe, ndarrar : the matrix of the values from the dataframe
+        Output :
+            ndarray : the matrix of probability to be labelized.
+        """
+        dataframe = self._normalize_dataframe(dataframe)
+        return  array(self._hypotesis(self.__weight, self.__bias, dataframe))

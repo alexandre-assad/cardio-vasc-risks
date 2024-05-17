@@ -1,21 +1,14 @@
 [tool.poetry]
-name = "cardio-vasc-risks"
+name = "tree-models"
 version = "0.1.0"
 description = ""
 authors = ["alexandre-assad <alexandre.assad@laplateforme.io>"]
 readme = "README.md"
-packages = [
-    { include = "logistic_regression"},
-    { include = "tree_models"}
-]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pandas = "^2.2.2"
 numpy = "^1.26.4"
-seaborn = "^0.13.2"
-matplotlib = "^3.8.4"
-scikit-learn = "^1.0.2"
+
 
 [build-system]
 requires = ["poetry-core"]

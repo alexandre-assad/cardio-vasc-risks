@@ -185,9 +185,9 @@ class CustomDecisionTree:
             dataframe[:, best_feature], best_threshold
         )
         left_child, right_child = self._build_tree(
-            dataframe[left_indexes, :], target_values[left_indexes], best_threshold
+            dataframe[left_indexes, :], target_values[left_indexes], depth+1
         ), self._build_tree(
-            dataframe[right_indexes, :], target_values[right_indexes], best_threshold
+            dataframe[right_indexes, :], target_values[right_indexes], depth+1
         )
         return Node(best_feature, best_threshold, left_child, right_child)
 

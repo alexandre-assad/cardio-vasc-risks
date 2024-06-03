@@ -19,6 +19,7 @@ def load_dataset(path: str | Path, sep: str) -> DataFrame:
     dataset = read_csv(path, sep=sep)
     return dataset
 
+
 def _booleanize_dataset(dataset: DataFrame) -> DataFrame:
     """Method to convert dataset to boolean values"""
     dataset[GENDER_STR] = dataset[GENDER_STR].apply(lambda x: bool(x - 1))
@@ -47,10 +48,3 @@ def drop_by_filter(dataset: DataFrame, filter: Callable[[Patient], bool]) -> Dat
         if filter(patient):
             new_dataset = new_dataset.drop(index)
     return new_dataset
-
-
-def convert_to_broader_df(dataset: DataFrame) -> DataFrame:
-    new_dataset = dataset.copy()
-    for index, patient_row in new_dataset.iterrows():
-        patient = create_patient(patient_row)
-        new_dataset.at[index, "age"] = patient.broader_age_group

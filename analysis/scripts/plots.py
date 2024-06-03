@@ -169,7 +169,9 @@ def plot_counts(res: tuple[Dict[Enum, int], Dict[Enum, int]]) -> None:
     plt.legend()
     plt.show()
 
+
 from icecream import ic
+
 
 def get_attrs(obj: object) -> set[str]:
     """gets all the attributes, and properties of an object
@@ -180,21 +182,23 @@ def get_attrs(obj: object) -> set[str]:
             attrs.add(attr)
     return attrs
 
+
 def create_row(obj: object, attrs: set[str]) -> dict[str, Any]:
     """Creates row, ommit enum types"""
     row = {}
     for attr in attrs:
         att = getattr(obj, attr)
-        if isinstance(att,Enum):
+        if isinstance(att, Enum):
             att = att.name
         row[attr] = att
     return row
 
+
 def pydantic_to_df(pydantic_objs: List[BaseModel]) -> DataFrame:
     """Converts a list of Pydantic objects to a DataFrame using attributes from get_attrs."""
-    attrs = get_attrs(pydantic_objs[0]) - get_attrs(BaseModel) 
+    attrs = get_attrs(pydantic_objs[0]) - get_attrs(BaseModel)
     data = []
     for obj in pydantic_objs:
-        row = create_row(obj,attrs)
+        row = create_row(obj, attrs)
         data.append(row)
     return DataFrame(data)

@@ -5,7 +5,7 @@ This project is a simple demonstration of how to use logistic regression to pred
 - [`analysis/`](analysis/): Contains Jupyter notebooks for generating various charts. Data Treatment, and processing
 - [`data/`](data/): Contains the raw data used in the project. With a slight attempt of applying DVC.
 - [`logistic_regression/`](logistic_regression/): Contains Python scripts for running our logistic regression.
-- [`models/`](models/): 
+- [`predict/`](predict/): The prediction notebook
 
 ## How to Run
 
@@ -30,4 +30,8 @@ jupyter notebook notebooks/cateorical_viz.ipynb
 jupyter predict/prediction.ipynb
 ```
 
-## 
+## Watch
+
+The watches are available at [`watch/`](watch/) folder. Otherwise you could check model's docstrings at :
+- [`logistic_regression/`](logistic_regression/)
+- [`tree_models/`](tree_models/)

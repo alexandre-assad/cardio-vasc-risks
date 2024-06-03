@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The logistic regression algorythm is the most popular supervised machine learning classifier model. The idea behind it is two fit the data with a linear modelisation.
+The logistic regression algorythm is the most popular supervised machine learning classifier model. The idea behind it is two fit the data with a linear modelisation, then calculate a probability of a label.
 This model could be either binary or multinomial.  
 
 ### How it works ?

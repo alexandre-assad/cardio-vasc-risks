@@ -7,6 +7,13 @@ As easy to explain as understand, the decision tree algorythm is a very popular 
 
 ## How it works 
 
+### Construction 
+
+A tree is a *succession of nodes*. They are three types of node :
+- The root node : the first node which will be the start of the walk-through of the tree. It has the same caracteristics as the inner node
+- The inner node : A node whose main goal is to separe a feature in two, and point to two new nodes.
+- The leaf : The last nodes, which will only contain a value 
+
 ### Basic function
 
 The main ideas are : 
@@ -24,4 +31,16 @@ They are two main public methods in the model :
 Basiquely, the ```fit``` method will create a Tree, and the ```predict``` method will traverse the tree newly created to find the most probable label.  
 *** 
 #### Fit method
-The main idea is the following one : "For enough feature with a maximum depth, it will create split of two that separe the best the feature with different label."
+The main idea is the following one : "With a maximum depth, it will create split of the best feature by two that separe it the best with different label."
+Starting from the root node, repeat it untill the leafs:
+- Select random features 
+- Among them, find the "best" feature and its "threhold" (the feature the most correlated, with the value that separate the best the values by the distinct labels)
+- Point to two new nodes, which will be access thanks to the node threhold for the specific feature.  
+
+At the leaf, find the value : the most common label
+### Predict method 
+It is simply a walk-through of the tree, starting by the node, to predict an observation.  
+For each node except the leaf :
+- Compare with the observation the node's best feature and node's threhold : if the observation's value is superior than move to the right child, otherwise move to the left child.
+
+At the leaf, return its value
